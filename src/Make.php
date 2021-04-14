@@ -437,8 +437,8 @@ class Make
         if (!empty($this->infAdic)) {
             $this->dom->appChild($this->infMDFe, $this->infAdic, 'Falta tag "infAdic"');
         }
+        $this->dom->appChild($this->infMDFe, $this->infRespTec, 'Falta tag "infRespTec"');
         $this->dom->appChild($this->MDFe, $this->infMDFe, 'Falta tag "infMDFe"');
-        $this->dom->appChild($this->MDFe, $this->infRespTec, 'Falta tag "infRespTec"');
         $this->dom->appendChild($this->MDFe);
         // testa da chave
         $this->checkMDFKey($this->dom);
