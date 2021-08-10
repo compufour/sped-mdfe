@@ -218,6 +218,10 @@ class Make
      * @var boolean
      */
     protected $replaceAccentedChars = false;
+    /**
+     * @var null
+     */
+    private $categCombVeic = null;
 
     /**
      * Função construtora cria um objeto DOMDocument
@@ -336,8 +340,15 @@ class Make
                 }
                 if ($this->valePed) {
                     $this->dom->appChild($this->infANTT, $this->valePed, 'Falta tag "valePed"');
-                    if ($this->disp) {
-                        $this->dom->addArrayChild($this->valePed, $this->disp, 'Falta tag "disp"');
+                    $this->dom->addArrayChild($this->valePed, $this->disp, 'Falta tag "disp"');
+                    if (!empty($this->categCombVeic)) {
+                        $this->dom->addChild(
+                            $this->valePed,
+                            "categCombVeic",
+                            $this->categCombVeic,
+                            false,
+                            "Categoria de Combinação Veicular"
+                        );
                     }
                 }
                 if ($this->infContratante) {
@@ -890,11 +901,11 @@ class Make
      *
      * @return DOMElement
      */
-    private function tagvalePed()
+    public function tagvalePed($categCombVeic)
     {
-        if (empty($this->valePed)) {
-            $this->valePed = $this->dom->createElement("valePed");
-        }
+        $this->valePed = $this->dom->createElement("valePed");
+        $this->categCombVeic = $categCombVeic;
+
         return $this->valePed;
     }
 
@@ -937,9 +948,9 @@ class Make
             'CNPJPg',
             'CPFPg',
             'nCompra',
-            'vValePed'
+            'vValePed',
+            'tpValePed'
         ];
-        $this->tagvalePed();
         $std = $this->equilizeParameters($std, $possible);
         $identificador = '[4] <disp> - ';
         $disp = $this->dom->createElement("disp");
@@ -975,7 +986,7 @@ class Make
             $disp,
             "vValePed",
             $this->conditionalNumberFormatting($std->vValePed),
-            false,
+            true,
             $identificador . "Valor do Vale-Pedagio"
         );
         $this->disp[] = $disp;
